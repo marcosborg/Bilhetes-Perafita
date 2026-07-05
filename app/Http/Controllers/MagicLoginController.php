@@ -35,7 +35,7 @@ class MagicLoginController extends Controller
             'tickets' => $tickets,
             'selectedTicket' => $request->integer('bilhete')
                 ? $tickets->firstWhere('id', $request->integer('bilhete'))
-                : $tickets->first(),
+                : null,
         ]);
     }
 

@@ -120,13 +120,15 @@ class ExampleTest extends TestCase
             ->assertOk()
             ->assertSee('Enviar bilhetes')
             ->assertSee('Irmão A')
-            ->assertSee('WhatsApp');
+            ->assertDontSee('role="dialog"', false);
 
         $this->get(route('magic-portal', [$user, $token, 'bilhete' => Ticket::first()->id]))
             ->assertOk()
             ->assertSee('role="dialog"', false)
+            ->assertSee('WhatsApp')
             ->assertSee('Fechar')
-            ->assertSee('Marcar enviado');
+            ->assertSee('Marcar enviado')
+            ->assertDontSee('<iframe', false);
 
         $this->assertGuest();
         $user->refresh();

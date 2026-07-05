@@ -53,8 +53,8 @@
 
         @if ($selectedTicket)
             <div class="fixed inset-0 z-50 flex items-end bg-slate-950/70 p-0 sm:items-center sm:p-6" role="dialog" aria-modal="true">
-                <div class="flex max-h-[100vh] w-full flex-col overflow-hidden bg-white shadow-2xl sm:mx-auto sm:max-h-[92vh] sm:max-w-5xl sm:rounded-md">
-                    <div class="flex flex-col gap-3 border-b border-slate-200 p-4 sm:flex-row sm:items-start sm:justify-between">
+                <div class="w-full bg-white p-4 shadow-2xl sm:mx-auto sm:max-w-xl sm:rounded-md">
+                    <div class="flex flex-col gap-4">
                         <div>
                             <p class="text-sm text-slate-500">{{ $selectedTicket->family?->name }}</p>
                             <h2 class="text-2xl font-semibold">{{ $selectedTicket->brother?->name }}</h2>
@@ -76,7 +76,6 @@
                                href="{{ route('magic-portal', [$user, $token]) }}">Fechar</a>
                         </div>
                     </div>
-                    <iframe class="h-[76vh] w-full border-0" src="{{ route('tickets.download', $selectedTicket->public_token) }}"></iframe>
                 </div>
             </div>
         @endif
