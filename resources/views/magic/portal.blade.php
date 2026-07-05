@@ -27,30 +27,34 @@
             </div>
         @endif
 
-        <section class="grid gap-5 lg:grid-cols-[minmax(280px,360px)_1fr]">
-            <aside class="rounded-md border border-slate-200 bg-white shadow-sm">
-                <div class="border-b border-slate-200 p-3">
-                    <h2 class="text-sm font-semibold text-slate-800">Irmãos</h2>
-                </div>
-                <div class="max-h-[70vh] divide-y divide-slate-100 overflow-auto">
-                    @foreach ($tickets as $ticket)
-                        <a href="{{ route('magic-portal', [$user, $token, 'bilhete' => $ticket->id]) }}"
-                           class="flex items-center justify-between gap-3 px-3 py-3 text-sm hover:bg-amber-50 {{ $selectedTicket?->id === $ticket->id ? 'bg-amber-50' : '' }}">
-                            <span>
-                                <span class="block font-medium text-slate-900">{{ $ticket->brother?->name }}</span>
-                                <span class="block text-xs text-slate-500">{{ $ticket->family?->name }}</span>
-                            </span>
-                            <span class="rounded px-2 py-1 text-xs {{ $ticket->status === 'sent' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600' }}">
-                                {{ $ticket->status === 'sent' ? 'Enviado' : 'Pendente' }}
-                            </span>
-                        </a>
-                    @endforeach
-                </div>
-            </aside>
+        <section class="rounded-md border border-slate-200 bg-white shadow-sm">
+            <div class="border-b border-slate-200 p-3">
+                <h2 class="text-sm font-semibold text-slate-800">Irmãos</h2>
+            </div>
+            <div class="divide-y divide-slate-100">
+                @forelse ($tickets as $ticket)
+                    <a href="{{ route('magic-portal', [$user, $token, 'bilhete' => $ticket->id]) }}"
+                       class="flex items-center justify-between gap-3 px-3 py-3 text-sm hover:bg-amber-50 {{ $selectedTicket?->id === $ticket->id ? 'bg-amber-50' : '' }}">
+                        <span>
+                            <span class="block font-medium text-slate-900">{{ $ticket->brother?->name }}</span>
+                            <span class="block text-xs text-slate-500">{{ $ticket->family?->name }}</span>
+                        </span>
+                        <span class="rounded px-2 py-1 text-xs {{ $ticket->status === 'sent' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600' }}">
+                            {{ $ticket->status === 'sent' ? 'Enviado' : 'Pendente' }}
+                        </span>
+                    </a>
+                @empty
+                    <div class="p-6 text-sm text-slate-600">
+                        Não existem bilhetes atribuídos a este grupo.
+                    </div>
+                @endforelse
+            </div>
+        </section>
 
-            <section class="rounded-md border border-slate-200 bg-white p-4 shadow-sm">
-                @if ($selectedTicket)
-                    <div class="flex flex-col gap-4 border-b border-slate-200 pb-4 sm:flex-row sm:items-start sm:justify-between">
+        @if ($selectedTicket)
+            <div class="fixed inset-0 z-50 flex items-end bg-slate-950/70 p-0 sm:items-center sm:p-6" role="dialog" aria-modal="true">
+                <div class="flex max-h-[100vh] w-full flex-col overflow-hidden bg-white shadow-2xl sm:mx-auto sm:max-h-[92vh] sm:max-w-5xl sm:rounded-md">
+                    <div class="flex flex-col gap-3 border-b border-slate-200 p-4 sm:flex-row sm:items-start sm:justify-between">
                         <div>
                             <p class="text-sm text-slate-500">{{ $selectedTicket->family?->name }}</p>
                             <h2 class="text-2xl font-semibold">{{ $selectedTicket->brother?->name }}</h2>
@@ -68,17 +72,14 @@
                                 @csrf
                                 <button class="rounded-md border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-900 hover:bg-amber-100" type="submit">Marcar enviado</button>
                             </form>
+                            <a class="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                               href="{{ route('magic-portal', [$user, $token]) }}">Fechar</a>
                         </div>
                     </div>
-
-                    <iframe class="mt-4 h-[68vh] w-full rounded-md border border-slate-200" src="{{ route('tickets.download', $selectedTicket->public_token) }}"></iframe>
-                @else
-                    <div class="rounded-md border border-slate-200 bg-slate-50 p-6 text-sm text-slate-600">
-                        Não existem bilhetes atribuídos a este grupo.
-                    </div>
-                @endif
-            </section>
-        </section>
+                    <iframe class="h-[76vh] w-full border-0" src="{{ route('tickets.download', $selectedTicket->public_token) }}"></iframe>
+                </div>
+            </div>
+        @endif
     </main>
 </body>
 </html>

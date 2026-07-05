@@ -122,6 +122,12 @@ class ExampleTest extends TestCase
             ->assertSee('Irmão A')
             ->assertSee('WhatsApp');
 
+        $this->get(route('magic-portal', [$user, $token, 'bilhete' => Ticket::first()->id]))
+            ->assertOk()
+            ->assertSee('role="dialog"', false)
+            ->assertSee('Fechar')
+            ->assertSee('Marcar enviado');
+
         $this->assertGuest();
         $user->refresh();
         $this->assertTrue($user->magic_login_expires_at->isFuture());
